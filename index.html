@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI英语学习助手 - 智能词汇管理平台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js">
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="logo">
+                    <h1>📚 AI英语助手</h1>
+                </div>
+            </div>
+            <div class="nav-center">
+                <div class="nav-menu">
+                    <button class="nav-item active" data-page="learning">
+                        <i data-lucide="book-open"></i>
+                        <span>分组学习</span>
+                    </button>
+                    <button class="nav-item" data-page="ai-assistant">
+                        <i data-lucide="message-circle"></i>
+                        <span>AI辅助</span>
+                    </button>
+                    <button class="nav-item" data-page="word-bank">
+                        <i data-lucide="library"></i>
+                        <span>单词库</span>
+                    </button>
+                    <button class="nav-item" data-page="review">
+                        <i data-lucide="refresh-cw"></i>
+                        <span>智能复习</span>
+                    </button>
+                    <button class="nav-item" data-page="progress">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>学习进度</span>
+                    </button>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="daily-progress">
+                    <span class="progress-label">今日目标</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="dailyProgress"></div>
+                    </div>
+                    <span class="progress-text" id="progressText">0/20</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <i data-lucide="moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- 分组学习页面 -->
+        <div class="page active" id="learning-page">
+            <div class="page-header">
+                <h2>分组学习</h2>
+                <p>AI智能分组，每组10个单词，循序渐进掌握</p>
+            </div>
+
+            <div class="category-selector">
+                <button class="category-btn active" data-category="all">全部</button>
+                <button class="category-btn" data-category="business">商务</button>
+                <button class="category-btn" data-category="travel">旅游</button>
+                <button class="category-btn" data-category="daily">日常</button>
+                <button class="category-btn" data-category="academic">学术</button>
+                <button class="category-btn" data-category="tech">技术</button>
+            </div>
+
+            <div class="group-progress">
+                <div class="progress-dots" id="progressDots"></div>
+                <span class="group-info">第 <span id="currentGroup">1</span> 组 / 共 <span id="totalGroups">10</span> 组</span>
+            </div>
+
+            <div class="word-card" id="wordCard">
+                <div class="word-header">
+                    <div class="word-info">
+                        <h3 class="word-text" id="wordText">loading...</h3>
+                        <div class="phonetic" id="phonetic"></div>
+                    </div>
+                    <button class="audio-btn" id="audioBtn">
+                        <i data-lucide="volume-2"></i>
+                    </button>
+                </div>
+                <div class="word-content">
+                    <div class="word-meaning" id="wordMeaning"></div>
+                    <div class="word-example" id="wordExample"></div>
+                </div>
+                <div class="word-footer">
+                    <div class="difficulty-badge" id="difficultyBadge"></div>
+                    <div class="action-buttons">
+                        <button class="btn btn-danger" id="dontKnowBtn">不认识</button>
+                        <button class="btn btn-primary" id="knowBtn">认识</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group-controls">
+                <button class="btn btn-secondary" id="prevWordBtn" disabled>
+                    <i data-lucide="chevron-left"></i>
+                    上一个
+                </button>
+                <button class="btn btn-primary" id="nextGroupBtn" disabled>
+                    下一组
+                    <i data-lucide="chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- AI辅助学习页面 -->
+        <div class="page" id="ai-assistant-page">
+            <div class="page-header">
+                <h2>AI辅助学习</h2>
+                <p>智能对话练习，个性化学习体验</p>
+            </div>
+
+            <div class="ai-tabs">
+                <button class="tab-btn active" data-tab="chat">AI对话</button>
+                <button class="tab-btn" data-tab="novel">AI小说</button>
+            </div>
+
+            <div class="ai-content">
+                <!-- AI对话 -->
+                <div class="tab-content active" id="chat-tab">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message ai-message">
+                                <div class="message-avatar">
+                                    <i data-lucide="bot"></i>
+                                </div>
+                                <div class="message-content">
+                                    <p>你好！我是你的AI英语学习助手。我会根据你已学的单词和你进行对话练习。让我们开始吧！</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <input type="text" class="chat-input" id="chatInput" placeholder="输入你想说的话...">
+                            <button class="btn btn-primary" id="sendBtn">
+                                <i data-lucide="send"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI小说 -->
+                <div class="tab-content" id="novel-tab">
+                    <div class="novel-container">
+                        <div class="novel-controls">
+                            <button class="btn btn-primary" id="generateNovelBtn">
+                                <i data-lucide="sparkles"></i>
+                                生成今日故事
+                            </button>
+                            <select class="novel-style" id="novelStyle">
+                                <option value="casual">轻松日常</option>
+                                <option value="adventure">冒险故事</option>
+                                <option value="business">商务场景</option>
+                                <option value="academic">学术讨论</option>
+                            </select>
+                        </div>
+                        <div class="novel-content" id="novelContent">
+                            <div class="novel-placeholder">
+                                <i data-lucide="book-open"></i>
+                                <p>点击上方按钮生成基于今日所学单词的趣味故事</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 单词库页面 -->
+        <div class="page" id="word-bank-page">
+            <div class="page-header">
+                <h2>单词库</h2>
+                <p>管理你的词汇收藏，支持搜索和分类</p>
+            </div>
+
+            <div class="word-bank-controls">
+                <div class="search-container">
+                    <i data-lucide="search"></i>
+                    <input type="text" class="search-input" id="wordSearch" placeholder="搜索单词...">
+                </div>
+                <div class="filter-container">
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="all">全部分类</option>
+                        <option value="business">商务</option>
+                        <option value="travel">旅游</option>
+                        <option value="daily">日常</option>
+                        <option value="academic">学术</option>
+                        <option value="tech">技术</option>
+                    </select>
+                    <select class="filter-select" id="difficultyFilter">
+                        <option value="all">全部难度</option>
+                        <option value="easy">简单</option>
+                        <option value="medium">中等</option>
+                        <option value="hard">困难</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="importBtn">
+                    <i data-lucide="upload"></i>
+                    导入CSV
+                </button>
+                <input type="file" id="csvInput" accept=".csv" style="display: none;">
+            </div>
+
+            <div class="word-bank-grid" id="wordBankGrid"></div>
+
+            <div class="word-bank-stats">
+                <div class="stat-card">
+                    <h3 id="totalWords">0</h3>
+                    <p>总词汇量</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="masteredWords">0</h3>
+                    <p>已掌握</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="learningWords">0</h3>
+                    <p>学习中</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 智能复习页面 -->
+        <div class="page" id="review-page">
+            <div class="page-header">
+                <h2>智能复习</h2>
+                <p>基于间隔重复算法，科学安排复习时间</p>
+            </div>
+
+            <div class="review-status">
+                <div class="review-queue">
+                    <h3>待复习词汇</h3>
+                    <div class="queue-count" id="reviewQueueCount">0</div>
+                </div>
+                <div class="review-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">今日完成</span>
+                        <span class="stat-value" id="todayCompleted">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">连续复习</span>
+                        <span class="stat-value" id="reviewStreak">0天</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container" id="quizContainer" style="display: none;">
+                <div class="quiz-question">
+                    <h4>选择单词的正确释义：</h4>
+                    <div class="word-to-review" id="wordToReview"></div>
+                </div>
+                <div class="quiz-options" id="quizOptions"></div>
+                <div class="quiz-feedback" id="quizFeedback"></div>
+            </div>
+
+            <div class="review-controls">
+                <button class="btn btn-primary" id="startReviewBtn">开始复习</button>
+                <button class="btn btn-secondary" id="quickReviewBtn">快速复习</button>
+            </div>
+        </div>
+
+        <!-- 学习进度页面 -->
+        <div class="page" id="progress-page">
+            <div class="page-header">
+                <h2>学习进度</h2>
+                <p>追踪你的学习成果，见证成长轨迹</p>
+            </div>
+
+            <div class="progress-stats">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="book"></i>
+                        </div>
+                        <h3 id="totalVocab">0</h3>
+                        <p>总词汇量</p>
+                        <div class="stat-trend up">
+                            <i data-lucide="trending-up"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="target"></i>
+                        </div>
+                        <h3 id="todayLearning">0</h3>
+                        <p>今日学习</p>
+                        <div class="stat-trend up">
+                            <i data-lucide="trending-up"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="refresh-cw"></i>
+                        </div>
+                        <h3 id="pendingReview">0</h3>
+                        <p>待复习</p>
+                        <div class="stat-trend neutral">
+                            <i data-lucide="minus"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="flame"></i>
+                        </div>
+                        <h3 id="learningStreak">0</h3>
+                        <p>连续学习</p>
+                        <div class="stat-trend up">
+                            <i data-lucide="trending-up"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-charts">
+                <div class="chart-container">
+                    <h3>学习趋势</h3>
+                    <canvas id="learningChart" width="400" height="200"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>词汇掌握分布</h3>
+                    <canvas id="masteryChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+
+            <div class="progress-settings">
+                <h3>学习设置</h3>
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label>每日目标</label>
+                        <input type="number" id="dailyGoal" value="20" min="1" max="100">
+                        <span>个单词</span>
+                    </div>
+                    <div class="setting-item">
+                        <label>复习提醒</label>
+                        <input type="time" id="reviewReminder">
+                    </div>
+                    <div class="setting-item">
+                        <label>语音设置</label>
+                        <select id="voiceSettings">
+                            <option value="en-US">美式英语</option>
+                            <option value="en-GB">英式英语</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>AI正在准备内容...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/ai-service.js"></script>
+    <script src="js/srs-algorithm.js"></script>
+    <script src="js/speech.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
